@@ -1,0 +1,83 @@
+# ==================================================
+# Splunk Base Environment (Unconfigured)
+# --------------------------------------------------
+# - 3 Standalone Search Heads
+# - 1 Deployer (not configured yet)
+# - No SHC settings applied
+# - Intended as a starting lab environment
+# ==================================================
+
+version: '3.8'
+
+services:
+  sh1:
+    image: splunk/splunk:9.0.3-openjdk11
+    container_name: sh1
+    hostname: sh1
+    networks:
+      - skynet
+    ports:
+      - "8005:8000"
+      - "8094:8089"
+    environment:
+      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
+      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
+      SPLUNK_START_ARGS: "--accept-license"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+  sh2:
+    image: splunk/splunk:9.0.3-openjdk11
+    container_name: sh2
+    hostname: sh2
+    networks:
+      - skynet
+    ports:
+      - "8006:8000"
+      - "8095:8089"
+    environment:
+      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
+      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
+      SPLUNK_START_ARGS: "--accept-license"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+  sh3:
+    image: splunk/splunk:9.0.3-openjdk11
+    container_name: sh3
+    hostname: sh3
+    networks:
+      - skynet
+    ports:
+      - "8007:8000"
+      - "8096:8089"
+    environment:
+      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
+      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
+      SPLUNK_START_ARGS: "--accept-license"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+  dep1:
+    image: splunk/splunk:9.0.3-openjdk11
+    container_name: dep1
+    hostname: dep1
+    networks:
+      - skynet
+    ports:
+      - "8008:8000"
+      - "8097:8089"
+    environment:
+      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
+      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
+      SPLUNK_START_ARGS: "--accept-license"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+networks:
+  skynet:
+    external: true
