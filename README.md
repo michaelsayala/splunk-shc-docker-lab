@@ -6,8 +6,8 @@ This repository provides a Docker-based Splunk lab environment designed to simul
 
 It supports two deployment modes:
 
-1. Base Environment (Unconfigured)
-2. Preconfigured Search Head Cluster (SHC)
+1. [Base Environment (Unconfigured)](https://github.com/michaelsayala/splunk-shc-docker-lab/blob/main/docker-compose.base.yml)
+2. [Preconfigured Search Head Cluster (SHC)](https://github.com/michaelsayala/splunk-shc-docker-lab/blob/main/docker-compose.shc.yml)
 
 This lab is intended for learning, testing, troubleshooting, and demonstrating Splunk clustering architecture in a controlled environment.
 
