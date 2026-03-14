@@ -15,11 +15,6 @@ services:
       SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
       SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
       SPLUNK_START_ARGS: "--accept-license"
-      SPLUNK_ROLE: splunk_search_head
-      SPLUNK_SEARCH_HEAD_URL: sh1,sh2,sh3
-      SPLUNK_SEARCH_HEAD_CAPTAIN_URL: sh1
-      SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
-      SPLUNK_DEPLOYER_URL: dep1
     volumes:
     - sh1_data:/opt/splunk
     tty: true
@@ -41,11 +36,6 @@ services:
       SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
       SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
       SPLUNK_START_ARGS: "--accept-license"
-      SPLUNK_ROLE: splunk_search_head
-      SPLUNK_SEARCH_HEAD_URL: sh1,sh2,sh3
-      SPLUNK_SEARCH_HEAD_CAPTAIN_URL: sh1
-      SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
-      SPLUNK_DEPLOYER_URL: dep1
     volumes:
     - sh2_data:/opt/splunk
     tty: true
@@ -67,11 +57,6 @@ services:
       SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
       SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
       SPLUNK_START_ARGS: "--accept-license"
-      SPLUNK_ROLE: splunk_search_head
-      SPLUNK_SEARCH_HEAD_URL: sh1,sh2,sh3
-      SPLUNK_SEARCH_HEAD_CAPTAIN_URL: sh1
-      SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
-      SPLUNK_DEPLOYER_URL: dep1
     volumes:
     - sh3_data:/opt/splunk
     tty: true
@@ -93,9 +78,6 @@ services:
       SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
       SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
       SPLUNK_START_ARGS: "--accept-license"
-      SPLUNK_ROLE: splunk_deployer
-      SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
-      SPLUNK_SEARCH_HEAD_URL: sh1,sh2,sh3
     volumes:
     - dep1_data:/opt/splunk
     tty: true
