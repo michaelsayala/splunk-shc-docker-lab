@@ -29,50 +29,28 @@ The repository supports **two deployment modes**:
 ---
 ## Splunk Search Head Cluster Architecture
 
+## Splunk Search Head Cluster Architecture
+
 ```mermaid
-graph TD
-    %% =========================
-    %% Deployer
-    %% =========================
-    DEP["Deployer (dep1)"]
+graph LR
 
-    %% Invisible spacing nodes
-    A[ ]:::invis
-    B[ ]:::invis
-    C[ ]:::invis
+%% Deployer on top
+DEP["Deployer (dep1)"]
 
-    %% =========================
-    %% Search Head Cluster
-    %% =========================
-    SH1["sh1"]
-    SH2["sh2"]
-    SH3["sh3"]
+%% Search Head Cluster
+SH1["Search Head 1 (sh1)"]
+SH2["Search Head 2 (sh2)"]
+SH3["Search Head 3 (sh3)"]
 
-    %% =========================
-    %% Deployer pushes apps/configuration
-    %% =========================
-    DEP -.-> SH1
-    DEP -.-> SH2
-    DEP -.-> SH3
+%% Layout
+DEP --> SH1
+DEP --> SH2
+DEP --> SH3
 
-    %% =========================
-    %% SHC member replication links
-    %% =========================
-    SH1 --- SH2
-    SH2 --- SH3
-    SH1 --- SH3
-
-    %% =========================
-    %% Force horizontal alignment
-    %% =========================
-    SH1 --- A
-    SH2 --- B
-    SH3 --- C
-
-%% =========================
-%% Invisible class for spacing
-%% =========================
-classDef invis fill:none,stroke:none;
+%% Cluster replication links
+SH1 --- SH2
+SH2 --- SH3
+SH1 --- SH3
 ```
 ---
 | Component | Hostname | Web Port | Management Port |
