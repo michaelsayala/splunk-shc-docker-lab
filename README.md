@@ -30,35 +30,34 @@ The repository supports **two deployment modes**:
 ## Cluster Architecture
 
 ```mermaid
-flowchart TB
+graph LR
+    %% =========================
+    %% Deployer on top
+    %% =========================
+    DEP[Deployer (dep1)]
 
-%% =========================
-%% Deployer
-%% =========================
-DEP["Deployer (dep1)"]
+    %% =========================
+    %% Search Head Cluster
+    %% =========================
+    subgraph SHC["Search Head Cluster"]
+        SH1[sh1]
+        SH2[sh2]
+        SH3[sh3]
+    end
 
-%% =========================
-%% Search Head Cluster
-%% =========================
-subgraph SHC["Search Head Cluster"]
-    SH1["Search Head 1 (sh1)"]
-    SH2["Search Head 2 (sh2)"]
-    SH3["Search Head 3 (sh3)"]
-end
+    %% =========================
+    %% Deployer pushes apps/config
+    %% =========================
+    DEP -.-> SH1
+    DEP -.-> SH2
+    DEP -.-> SH3
 
-%% =========================
-%% Deployer pushes apps
-%% =========================
-DEP -.->|Push Apps / Configurations| SH1
-DEP -.->|Push Apps / Configurations| SH2
-DEP -.->|Push Apps / Configurations| SH3
-
-%% =========================
-%% Cluster Membership
-%% =========================
-SH1 --- SH2
-SH2 --- SH3
-SH1 --- SH3
+    %% =========================
+    %% SHC member links
+    %% =========================
+    SH1 --- SH2
+    SH2 --- SH3
+    SH1 --- SH3
 ```
 ---
 | Component | Hostname | Web Port | Management Port |
