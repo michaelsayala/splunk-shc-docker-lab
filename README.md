@@ -22,10 +22,6 @@ This lab is useful for understanding:
 - Deployer-based configuration management
 - Search Head cluster formation
 
-The repository supports **two deployment modes**:
-
-1. **Base Environment (Unconfigured)**
-2. **Preconfigured Search Head Cluster**
 ---
 
 ## Splunk Search Head Cluster Architecture
