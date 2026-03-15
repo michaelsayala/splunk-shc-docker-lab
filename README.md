@@ -27,38 +27,39 @@ The repository supports **two deployment modes**:
 1. **Base Environment (Unconfigured)**
 2. **Preconfigured Search Head Cluster**
 ---
-## Cluster Architecture
+## Splunk Search Head Cluster Architecture
 
 ```mermaid
-graph LR
+%% Professional Splunk-style SHC diagram
+graph TD
+    %% =========================
+    %% Deployer at the top
+    %% =========================
+    DEP[Deployer (dep1)]
 
-%% =========================
-%% Deployer
-%% =========================
-DEP[Deployer (dep1)]
+    %% =========================
+    %% Search Head Cluster members
+    %% =========================
+    subgraph SHC["Search Head Cluster"]
+        direction LR
+        SH1[sh1]
+        SH2[sh2]
+        SH3[sh3]
+    end
 
-%% =========================
-%% Search Head Cluster
-%% =========================
-subgraph SHC["Search Head Cluster"]
-    SH1[sh1]
-    SH2[sh2]
-    SH3[sh3]
-end
+    %% =========================
+    %% Deployer pushes apps/configuration
+    %% =========================
+    DEP -.-> SH1
+    DEP -.-> SH2
+    DEP -.-> SH3
 
-%% =========================
-%% Deployer pushes apps/config
-%% =========================
-DEP -.-> SH1
-DEP -.-> SH2
-DEP -.-> SH3
-
-%% =========================
-%% SHC member links
-%% =========================
-SH1 --- SH2
-SH2 --- SH3
-SH1 --- SH3
+    %% =========================
+    %% SHC member connections (cluster replication)
+    %% =========================
+    SH1 --- SH2
+    SH2 --- SH3
+    SH1 --- SH3
 ```
 ---
 | Component | Hostname | Web Port | Management Port |
