@@ -73,6 +73,7 @@ graph TD
 %% Invisible class for spacing
 %% =========================
 classDef invis fill:none,stroke:none;
+```
 ---
 | Component | Hostname | Web Port | Management Port |
 |-----------|----------|----------|----------------|
