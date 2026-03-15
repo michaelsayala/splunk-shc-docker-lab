@@ -2,114 +2,137 @@
 
 ## Overview
 
-This repository provides a Docker-based Splunk lab environment designed to simulate a Search Head Cluster (SHC) architecture.
+This repository provides a **Docker-based Splunk Search Head Cluster (SHC) environment** designed to simulate a distributed Splunk search layer.
 
-It supports two deployment modes:
+The lab demonstrates how multiple **Search Heads operate as a cluster** to provide:
 
-1. [Base Environment (Unconfigured)](https://github.com/michaelsayala/splunk-shc-docker-lab/blob/main/docker-compose.base.yml)
-2. [Preconfigured Search Head Cluster (SHC)](https://github.com/michaelsayala/splunk-shc-docker-lab/blob/main/docker-compose.shc.yml)
+- High availability
+- Search workload distribution
+- Centralized app management using a **Deployer**
 
-****
-This lab is intended for learning, testing, troubleshooting, and demonstrating Splunk clustering architecture in a controlled environment.
+The environment includes:
 
+- **3 Search Heads**
+- **1 Deployer**
+
+This lab is useful for understanding:
+
+- Search Head Cluster architecture
+- Captain election
+- Deployer-based configuration management
+- Search Head cluster formation
+
+The repository supports **two deployment modes**:
+
+1. **Base Environment (Unconfigured)**
+2. **Preconfigured Search Head Cluster**
 ---
+## Cluster Architecture
 
-## Architecture
+```mermaid
+flowchart TB
 
-### Base Environment
+subgraph SHC["Search Head Cluster"]
+    SH1["Search Head 1 (sh1)"]
+    SH2["Search Head 2 (sh2)"]
+    SH3["Search Head 3 (sh3)"]
+end
 
-- 3 standalone Splunk Enterprise instances
-- 1 deployer instance (not configured for SHC)
-- No clustering enabled
-- Suitable for manual SHC configuration practice
+DEP["Deployer (dep1)"]
 
-### Search Head Cluster Environment
+DEP --> SH1
+DEP --> SH2
+DEP --> SH3
 
-- 3 Search Heads
-- 1 Deployer
-- SH1 configured as cluster captain
-- Shared SHC secret across all members
-- Automatic SHC formation during container startup
+SH1 --- SH2
+SH2 --- SH3
+SH1 --- SH3
 
+```
 ---
+| Component | Hostname | Web Port | Management Port |
+|-----------|----------|----------|----------------|
+| Search Head 1 | sh1 | 8000 | 8089 |
+| Search Head 2 | sh2 | 8000 | 8089 |
+| Search Head 3 | sh3 | 8000 | 8089 |
+| Deployer | dep1 | 8000 | 8089 |
+---
+All containers run on the external Docker network:
 
-## Components
-
-| Component       | Hostname | Web UI Port | Management Port | Role     |
-|---------------|----------|------------|------------------|----------|
-| Search Head 1 | sh1      | 8005       | 8094             | Captain  |
-| Search Head 2 | sh2      | 8006       | 8095             | Member   |
-| Search Head 3 | sh3      | 8007       | 8096             | Member   |
-| Deployer      | dep1     | 8008       | 8097             | Deployer |
+```
+skynet
+```
 
 ---
 
 ## Prerequisites
 
-- Docker
-- Docker Compose
-- External Docker network named `skynet`
+### 1 Install Docker
 
-Create the required Docker network before deployment:
+Install Docker and Docker Compose.
 
-```bash
+```
+https://docs.docker.com/get-docker/
+```
+
+---
+
+### 2 Create Docker Network
+
+Create the external network used by the lab.
+
+```
 docker network create skynet
 ```
 
 ---
 
-## Repository Structure
+### 3 Create `.env` File
+
+Create a `.env` file in the project root.
+
+Example:
 
 ```
-.
-├── docker-compose.base.yml
-├── docker-compose.shc.yml
-├── .env.example
-└── README.md
+SPLUNK_PASSWORD=YourStrongPassword
+SPLUNK_SHC_SECRET=SHClusterSecret123
 ```
 
 ---
 
-## Environment Variables
+## Deployment Modes
 
-Create a `.env` file in the root directory. Do not commit this file to GitHub.
+### 1 Base Environment
 
-Example `.env`:
+This deployment starts the following components:
+- 3 Search Heads
+- 1 Deployer
 
-```
-SPLUNK_PASSWORD=splunkpassword
-SPLUNK_SHC_SECRET=splunkshcpassword
-```
+However, the Search Head Cluster is not automatically configured.
 
-Add `.env` to your `.gitignore`.
+This mode allows you to manually practice:
 
----
+Initializing a Search Head Cluster
 
-## Deployment Instructions
+- Setting the captain node
+- Joining cluster members
+- Configuring the deployer
 
-### Deploy Base Environment (Unconfigured)
-
-This deploys standalone Splunk instances without clustering.
-
-```bash
-docker compose -f docker-compose.base.yml up -d
-```
-
-Access the instances:
-
-- SH1: http://localhost:8005
-- SH2: http://localhost:8006
-- SH3: http://localhost:8007
-- DEP1: http://localhost:8008
-
-Use this mode if you want to manually configure Search Head Clustering.
+This is useful for learning manual SHC configuration.
 
 ---
 
-### Deploy Search Head Cluster (Preconfigured)
+### 2 Preconfigured Search Head Cluster
 
-This deployment automatically forms a Search Head Cluster.
+This deployment automatically configures the Search Head Cluster during container startup.
 
-```bash
-docker compose -f docker-compose.shc.yml up -d
-```
+The configuration includes:
+- Creating a Search Head Cluster
+- Setting sh1 as the initial captain
+- Joining sh1, sh2, sh3 as cluster members
+- Connecting the Deployer to the cluster
+
+This mode is useful for:
+- automated lab environments
+- repeatable testing
+- learning SHC architecture
