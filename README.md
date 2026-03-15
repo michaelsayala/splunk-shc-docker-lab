@@ -27,7 +27,6 @@ The repository supports **two deployment modes**:
 1. **Base Environment (Unconfigured)**
 2. **Preconfigured Search Head Cluster**
 ---
-## Splunk Search Head Cluster Architecture
 
 ## Splunk Search Head Cluster Architecture
 
