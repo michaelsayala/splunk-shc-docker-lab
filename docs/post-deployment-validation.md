@@ -125,19 +125,6 @@ index=_internal | stats count by splunk_server
 
 ---
 
-### 2.5 Indexer Cluster Validation (If Applicable)
-
-```bash
-splunk show cluster-status
-```
-
-**Expected:**
-- All indexers are `Up`
-- Cluster Master connected
-- No replication issues
-
----
-
 ## 3. Functional Testing
 
 ### 3.1 Deploy Apps from Deployer
