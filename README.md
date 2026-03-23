@@ -104,35 +104,41 @@ SPLUNK_SHC_SECRET=SHClusterSecret123
 
 ## Deployment Modes
 
-### 1 Base Environment
+### 1 Base Environment (Manual Configuration)
 
 This deployment starts the following components:
 - 3 Search Heads
 - 1 Deployer
 
-However, the Search Head Cluster is not automatically configured.
+The Search Head Cluster is not automatically configured. This mode allows you to manually practice:
 
-This mode allows you to manually practice:
-
-Initializing a Search Head Cluster
-
+- Initializing a Search Head Cluster
 - Setting the captain node
 - Joining cluster members
-- Configuring the deployer
+- Configuring the Deployer
 
-This is useful for learning manual SHC configuration.
+Start environment:
+
+```
+docker-compose -f docker-compose.manual.yml up -d
+```
 
 ---
 
 ### 2 Preconfigured Search Head Cluster
 
-This deployment automatically configures the Search Head Cluster during container startup.
+This deployment automatically configures the Search Head Cluster during container startup. The configuration includes:
 
-The configuration includes:
 - Creating a Search Head Cluster
 - Setting sh1 as the initial captain
 - Joining sh1, sh2, sh3 as cluster members
 - Connecting the Deployer to the cluster
+
+Start environment:
+
+```
+docker-compose -f docker-compose.preconfigured.yml up -d
+```
 
 This mode is useful for:
 - automated lab environments
