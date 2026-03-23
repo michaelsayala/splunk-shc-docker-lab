@@ -130,7 +130,7 @@ index=_internal | stats count by splunk_server
 ### 3.1 Deploy Apps from Deployer
 
 ```bash
-splunk apply shcluster-bundle -target https://<captain>:8089
+splunk apply shcluster-bundle -target https://<sh>:8089
 ```
 
 Verify:
