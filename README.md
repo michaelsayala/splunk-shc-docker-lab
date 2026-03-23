@@ -144,3 +144,17 @@ This mode is useful for:
 - automated lab environments
 - repeatable testing
 - learning SHC architecture
+
+## Repository Structure
+
+```
+.
+├── .env
+├── docker-compose.manual.yml
+├── docker-compose.preconfigured.yml
+├── README.md
+├── docs/
+│   ├── deployment-guide.md
+│   ├── post-deployment-validation.md
+```
+
