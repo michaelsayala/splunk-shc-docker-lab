@@ -136,7 +136,7 @@ splunk apply shcluster-bundle -target https://<captain>:8089
 Verify:
 
 ```bash
-splunk display shcluster-bundle-status
+splunk list shcluster-bundle -member_uri https://<sh>:8089
 ```
 
 **Expected:**
