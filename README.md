@@ -4,64 +4,60 @@
 
 This repository provides a **Docker-based Splunk Search Head Cluster (SHC) environment** designed to simulate a distributed Splunk search layer.
 
-The lab demonstrates how multiple **Search Heads operate as a cluster** to provide:
+It demonstrates how multiple Search Heads operate as a cluster to provide:
 
-- High availability
-- Search workload distribution
-- Centralized app management using a **Deployer**
-
-The environment includes:
-
-- **3 Search Heads**
-- **1 Deployer**
-
-This lab is useful for understanding:
-
-- Search Head Cluster architecture
-- Captain election
-- Deployer-based configuration management
-- Search Head cluster formation
+* High availability
+* Search workload distribution
+* Centralized app management using a Deployer
 
 ---
 
-## Splunk Search Head Cluster Architecture
+## Environment Components
 
-```mermaid
+* 3 Search Heads
+* 1 Deployer
+
+This lab is useful for understanding:
+
+* Search Head Cluster architecture
+* Captain election process
+* Deployer-based configuration management
+* Search Head cluster formation and synchronization
+
+---
+
+## Architecture
+
+```mermaid id="y2c7gk"
 flowchart TB
 
-%% =========================
-%% Search Head Cluster
-%% =========================
 subgraph SHC["Search Head Cluster"]
     SH1["Search Head 1 (sh1)"]
     SH2["Search Head 2 (sh2)"]
     SH3["Search Head 3 (sh3)"]
 end
 
-%% =========================
-%% Deployer
-%% =========================
 DEP["Deployer (dep1)"]
-
-%% =========================
-%% Relationships
-%% =========================
 
 DEP --> SH1
 DEP --> SH2
 DEP --> SH3
 ```
+
 ---
-| Component | Hostname | Web Port | Management Port |
-|-----------|----------|----------|----------------|
-| Search Head 1 | sh1 | 8000 | 8089 |
-| Search Head 2 | sh2 | 8000 | 8089 |
-| Search Head 3 | sh3 | 8000 | 8089 |
-| Deployer | dep1 | 8000 | 8089 |
----
+
+## Components
+
+| Component     | Hostname | Web Port | Management Port |
+| ------------- | -------- | -------- | --------------- |
+| Search Head 1 | sh1      | 8000     | 8089            |
+| Search Head 2 | sh2      | 8000     | 8089            |
+| Search Head 3 | sh3      | 8000     | 8089            |
+| Deployer      | dep1     | 8000     | 8089            |
+
 All containers run on the external Docker network:
 
-```
+```bash id="n7k3qp"
 skynet
 ```
 
@@ -69,33 +65,27 @@ skynet
 
 ## Prerequisites
 
-### 1 Install Docker
+### 1. Install Docker
 
-Install Docker and Docker Compose.
+Install Docker and Docker Compose:
 
-```
 https://docs.docker.com/get-docker/
-```
 
 ---
 
-### 2 Create Docker Network
+### 2. Create Docker Network
 
-Create the external network used by the lab.
-
-```
+```bash id="h1x9aa"
 docker network create skynet
 ```
 
 ---
 
-### 3 Create `.env` File
+### 3. Configure Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root:
 
-Example:
-
-```
+```bash id="q0v8lw"
 SPLUNK_PASSWORD=YourStrongPassword
 SPLUNK_SHC_SECRET=SHClusterSecret123
 ```
@@ -104,57 +94,51 @@ SPLUNK_SHC_SECRET=SHClusterSecret123
 
 ## Deployment Modes
 
-### 1 Base Environment (Manual Configuration)
+### 1. Base Environment (Manual Configuration)
 
-This deployment starts the following components:
-- 3 Search Heads
-- 1 Deployer
+This mode starts all components without automatically configuring the Search Head Cluster.
 
-The Search Head Cluster is not automatically configured. This mode allows you to manually practice:
+It allows you to practice:
 
-- Initializing a Search Head Cluster
-- Setting the captain node
-- Joining cluster members
-- Configuring the Deployer
+* Initializing a Search Head Cluster
+* Assigning a captain node
+* Joining cluster members
+* Configuring and deploying apps using the Deployer
 
-Start environment:
+Start the environment:
 
-```
+```bash id="r8p3md"
 docker-compose -f docker-compose.manual.yml up -d
 ```
 
 ---
 
-### 2 Preconfigured Search Head Cluster
+### 2. Preconfigured Search Head Cluster
 
-This deployment automatically configures the Search Head Cluster during container startup. The configuration includes:
+This mode automatically configures the Search Head Cluster during startup:
 
-- Creating a Search Head Cluster
-- Setting sh1 as the initial captain
-- Joining sh1, sh2, sh3 as cluster members
-- Connecting the Deployer to the cluster
+* Initializes the Search Head Cluster
+* Sets `sh1` as the initial captain
+* Joins `sh1`, `sh2`, and `sh3` as cluster members
+* Connects the Deployer to the cluster
 
-Start environment:
+Start the environment:
 
-```
+```bash id="t4x2kc"
 docker-compose -f docker-compose.preconfigured.yml up -d
 ```
 
-This mode is useful for:
-- automated lab environments
-- repeatable testing
-- learning SHC architecture
+---
 
 ## Repository Structure
 
-```
+```bash id="z9l1qp"
 .
 ├── .env
 ├── docker-compose.manual.yml
 ├── docker-compose.preconfigured.yml
 ├── README.md
-├── docs/
-│   ├── deployment-guide.md
-│   ├── post-deployment-validation.md
+└── docs/
+    ├── deployment-guide.md
+    └── post-deployment-validation.md
 ```
-
