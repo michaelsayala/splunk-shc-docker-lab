@@ -137,7 +137,7 @@ servers = https://idx1:8089,https://idx2:8089,https://idx3:8089
 
 ---
 
-### Method 3: Splunk Web (Optional)
+### Method 3: Splunk Web
 
 1. Open Splunk Web:
 
