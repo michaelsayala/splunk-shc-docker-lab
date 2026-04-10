@@ -1,125 +1,69 @@
-# Splunk Search Head Cluster – Deployment Procedure
+# Splunk Search Head Cluster – Deployment Guide
 
-## Overview
-
-This guide provides a step-by-step procedure for deploying and configuring a **Splunk Search Head Cluster (SHC)** in a Docker-based or virtual environment.
-
-It covers:
-
-* Deployer configuration
-* Search Head cluster initialization
-* Captain election
-* Cluster member configuration
-* Distributed search setup
+A step-by-step guide for deploying a **Splunk Search Head Cluster (SHC)**, including configuration of the **Deployer, Cluster Members, Captain Election, and Distributed Search** using Splunk CLI and configuration files.
 
 ---
 
-## 1. Configure Deployer
+## 1. Deployer Configuration
 
-> This step is performed on the **Deployer node only**.
+> Applies to the **Search Head Cluster Deployer**
+
+The deployer is responsible for distributing configurations to all Search Head Cluster members.
 
 ### Method 1: Configuration File
 
-#### 1. Access configuration directory
+**File Location**
 
-```bash id="p1x9kd"
-cd /opt/splunk/etc/system/local
+```
+$SPLUNK_HOME/etc/system/local/server.conf
 ```
 
-#### 2. Create or edit `server.conf`
+**Configuration**
 
-```bash id="k3m8lp"
-touch server.conf
-vi server.conf
-```
-
-#### 3. Add configuration
-
-```ini id="shc1"
+```ini
 [shclustering]
 pass4SymmKey = <security_key>
 shcluster_label = <label_name>
 ```
 
-#### Notes:
+---
 
-* `pass4SymmKey` → Authentication key for SHC communication
-* `shcluster_label` → Must be consistent across all cluster members (optional but recommended)
+## 2. Search Head Cluster Members Configuration
 
-#### 4. Restart Splunk
-
-```bash id="r8x2qv"
-/opt/splunk/bin/splunk restart
-```
+> Applies to all Search Head Cluster Members
 
 ---
 
-## 2. Configure Search Head Cluster Members
-
-> This step must be executed on **each Search Head node**.
-
----
-
-### Method 1: CLI Initialization (Recommended)
+### Method 1: CLI (Recommended)
 
 #### 1. Navigate to Splunk bin directory
 
-```bash id="m2q7lt"
+```
 cd /opt/splunk/bin
-```
 
-#### 2. Initialize SHC configuration
-
-```bash id="v9c1hd"
 ./splunk init shcluster-config \
--auth <username>:<password> \
--mgmt_uri https://<sh_ip>:8089 \
--replication_port <port> \
--replication_factor <n> \
--conf_deploy_fetch_url https://<deployer_ip>:8089 \
--secret <pass4SymmKey> \
--shcluster_label <label_name>
-```
-
-#### Example
-
-```bash id="e4x8nf"
-./splunk init shcluster-config \
--auth admin:p@ssw0rd123 \
--mgmt_uri https://10.0.0.221:8089 \
--replication_port 8090 \
--replication_factor 3 \
--conf_deploy_fetch_url https://10.0.0.220:8089 \
--secret s3cr3t@123 \
--shcluster_label shcluster1
-```
-
-#### 3. Restart Splunk
-
-```bash id="u1k9qz"
-/opt/splunk/bin/splunk restart
+  -auth <username>:<password> \
+  -mgmt_uri https://<sh_member_ip>:8089 \
+  -replication_port <replication_port> \
+  -replication_factor <replication_number> \
+  -conf_deploy_fetch_url https://<deployer_ip>:8089 \
+  -secret <pass4SymmKey> \
+  -shcluster_label <cluster_label>
 ```
 
 ---
 
 ### Method 2: Configuration File
 
-#### 1. Navigate to configuration directory
+**File Location**
 
-```bash id="d7m3xz"
-cd /opt/splunk/etc/system/local
+```
+$SPLUNK_HOME/etc/system/local/server.conf
 ```
 
-#### 2. Create or edit `server.conf`
+**Configuration**
 
-```bash id="q8v2lp"
-touch server.conf
-vi server.conf
-```
-
-#### 3. Add configuration
-
-```ini id="shc2"
+```ini
 [replication_port://8090]
 
 [shclustering]
@@ -130,84 +74,41 @@ pass4SymmKey = <security_key>
 shcluster_label = <label_name>
 ```
 
-#### Notes:
-
-* Ensure `pass4SymmKey` matches the deployer
-* All nodes must share the same `shcluster_label`
-
-#### 4. Restart Splunk
-
-```bash id="z3p8mt"
-/opt/splunk/bin/splunk restart
-```
-
 ---
 
-## 3. Configure Search Head Captain
+## 3. Search Head Captain Configuration
 
-> This step designates a captain for the cluster.
-
----
-
-### Method 1: CLI Bootstrap (Recommended)
-
-#### 1. Navigate to bin directory
-
-```bash id="c1m9qx"
-cd /opt/splunk/bin
-```
-
-#### 2. Bootstrap captain
-
-```bash id="t6v3kd"
-./splunk bootstrap shcluster-captain \
--servers_list "https://<sh1>:8089,https://<sh2>:8089,https://<sh3>:8089" \
--auth <username>:<password>
-```
-
-#### Example
-
-```bash id="n8x2qp"
-./splunk bootstrap shcluster-captain \
--servers_list "https://10.0.0.221:8089,https://10.0.0.222:8089,https://10.0.0.223:8089" \
--auth admin:p@ssw0rd123
-```
-
-#### 3. Restart Splunk
-
-```bash id="y4k8mz"
-/opt/splunk/bin/splunk restart
-```
-
----
-
-## 4. Configure Distributed Search
-
-> This step connects the Search Head Cluster to Indexers.
+> Used to manually elect a Search Head Cluster Captain
 
 ---
 
 ### Method 1: CLI (Recommended)
 
-#### Add search peers
+```
+cd /opt/splunk/bin
+
+./splunk bootstrap shcluster-captain \
+-servers_list "https://<sh1>:8089,https://<sh2>:8089,https://<sh3>:8089" \
+-auth <username>:<password>
+```
+
+## 4. Configure Distributed Search
+
+> Connects Search Head Cluster to Indexers
+
+---
+
+### Method 1: CLI (Recommended)
 
 Run on each Search Head:
 
-```bash id="f2x9pl"
+```"
 ./splunk add search-server https://<indexer_ip>:8089 -auth <username>:<password>
-```
-
-#### Example
-
-```bash id="a9v3kt"
-./splunk add search-server https://10.0.0.101:8089 -auth admin:password
-./splunk add search-server https://10.0.0.102:8089 -auth admin:password
-./splunk add search-server https://10.0.0.103:8089 -auth admin:password
 ```
 
 #### Verify
 
-```bash id="k5m2qv"
+```
 ./splunk list search-server
 ```
 
@@ -223,24 +124,17 @@ https://10.0.0.103:8089    Active
 
 ### Method 2: Configuration File
 
-#### 1. Create or edit configuration
+**File Location**
 
-```bash id="p7x1ld"
-cd /opt/splunk/etc/system/local
-vi distsearch.conf
+```
+$SPLUNK_HOME/etc/system/local/distsearch.conf
 ```
 
-#### 2. Add configuration
+**Configuration**
 
-```ini id="ds1"
+```ini
 [distributedSearch]
 servers = https://idx1:8089,https://idx2:8089,https://idx3:8089
-```
-
-#### 3. Restart Splunk
-
-```bash id="r3v8mz"
-/opt/splunk/bin/splunk restart
 ```
 
 ---
