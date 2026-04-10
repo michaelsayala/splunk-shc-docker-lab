@@ -36,8 +36,6 @@ shcluster_label = <label_name>
 
 ### Method 1: CLI (Recommended)
 
-#### 1. Navigate to Splunk bin directory
-
 ```
 cd /opt/splunk/bin
 
