@@ -104,7 +104,7 @@ Run on each Search Head:
 ./splunk add search-server https://<indexer_ip>:8089 -auth <username>:<password>
 ```
 
-#### Verify
+Verify
 
 ```
 ./splunk list search-server
