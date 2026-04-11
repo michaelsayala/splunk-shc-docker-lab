@@ -21,7 +21,8 @@ services:
       SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
       SPLUNK_DEPLOYER_URL: dep1
     volumes:
-    - sh1_data:/opt/splunk
+    - sh1_etc:/opt/splunk/etc
+    - sh1_var:/opt/splunk/var
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -47,7 +48,8 @@ services:
       SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
       SPLUNK_DEPLOYER_URL: dep1
     volumes:
-    - sh2_data:/opt/splunk
+    - sh2_etc:/opt/splunk/etc
+    - sh2_var:/opt/splunk/var
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -73,7 +75,8 @@ services:
       SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
       SPLUNK_DEPLOYER_URL: dep1
     volumes:
-    - sh3_data:/opt/splunk
+    - sh3_etc:/opt/splunk/etc
+    - sh3_var:/opt/splunk/var
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -97,7 +100,8 @@ services:
       SPLUNK_SHC_SECRET: ${SPLUNK_SHC_SECRET}
       SPLUNK_SEARCH_HEAD_URL: sh1,sh2,sh3
     volumes:
-    - dep1_data:/opt/splunk
+    - dep1_etc:/opt/splunk/etc
+    - dep1_var:/opt/splunk/var
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -111,7 +115,11 @@ networks:
 # Named Volumes
 # -------------------------------
 volumes:
-  dep1_data:
-  sh1_data:
-  sh2_data:
-  sh3_data:
+  sh1_etc:
+  sh1_var:
+  sh2_etc:
+  sh2_var:
+  sh3_etc:
+  sh3_var:
+  dep1_etc:
+  dep1_var:
