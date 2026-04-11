@@ -133,6 +133,9 @@ splunk list shcluster-bundle -member_uri https://<sh>:8089
 ```
 <img width="901" height="371" alt="image" src="https://github.com/user-attachments/assets/bf7f78aa-b397-4654-8844-3ed18aaa9ca5" />
 
+<img width="713" height="255" alt="image" src="https://github.com/user-attachments/assets/47ee98a2-5330-47be-84fc-d45b40260a62" />
+
+
 
 **Expected:**
 - Bundle applied successfully
