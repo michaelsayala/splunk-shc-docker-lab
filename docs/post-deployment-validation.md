@@ -13,6 +13,7 @@ Run on each Search Head member:
 ```bash
 splunk show shcluster-status
 ```
+<img width="782" height="565" alt="image" src="https://github.com/user-attachments/assets/94b18e0f-8984-4bba-8ac3-be26bbdbe42f" />
 
 **Expected Results:**
 - All members show `Status: Up`
@@ -23,19 +24,7 @@ splunk show shcluster-status
 
 ---
 
-### 1.2 Verify Captain Election
-
-```bash
-splunk show shcluster-status | grep captain
-```
-
-**Expected:**
-- One `Captain`
-- Remaining members are `Non-Captain`
-
----
-
-### 1.3 Verify KV Store Status
+### 1.2 Verify KV Store Status
 
 ```bash
 splunk show kvstore-status
@@ -48,7 +37,7 @@ splunk show kvstore-status
 
 ---
 
-### 1.4 Verify Replication Port Connectivity
+### 1.3 Verify Replication Port Connectivity
 
 ```bash
 telnet <peer_ip> 8090
