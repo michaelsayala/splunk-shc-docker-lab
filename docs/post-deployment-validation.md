@@ -124,12 +124,15 @@ index=_internal | stats count by splunk_server
 ```bash
 splunk apply shcluster-bundle -target https://<sh>:8089
 ```
+<img width="1441" height="207" alt="image" src="https://github.com/user-attachments/assets/d6ec753a-5f04-426d-871d-871ae6fe3e0b" />
 
 Verify:
 
 ```bash
 splunk list shcluster-bundle -member_uri https://<sh>:8089
 ```
+<img width="901" height="371" alt="image" src="https://github.com/user-attachments/assets/bf7f78aa-b397-4654-8844-3ed18aaa9ca5" />
+
 
 **Expected:**
 - Bundle applied successfully
