@@ -30,6 +30,9 @@ splunk show shcluster-status
 splunk show kvstore-status
 ```
 
+<img width="803" height="540" alt="image" src="https://github.com/user-attachments/assets/f26f90f3-b648-4a73-9eb3-232844fa3933" />
+
+
 **Expected:**
 - Status = `Ready`
 - KV Store running
