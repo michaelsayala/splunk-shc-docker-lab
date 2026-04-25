@@ -1,100 +1,82 @@
+# -------------------------------
+# Common Environment Variables
+# -------------------------------
+x-splunk-env: &splunk-env
+  SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
+  SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
+  SPLUNK_START_ARGS: "--accept-license"
+
+# -------------------------------
+# Common Service Configuration
+# -------------------------------
+x-splunk-common: &splunk-common
+  image: splunk/splunk:9.0.3-openjdk11
+  restart: unless-stopped
+  networks:
+    - skynet
+  tty: true
+  stdin_open: true
+
 services:
   # -------------------------------
-  # Search Head 1
+  # Search Head Cluster
   # -------------------------------
   sh1:
-    image: splunk/splunk:9.0.3-openjdk11
-    container_name: sh1
+    <<: *splunk-common
     hostname: sh1
-    networks:
-      - skynet
     ports:
-      - "8005:8000"
-      - "8095:8089"
+      - "8001:8000"
     environment:
-      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
-      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
-      SPLUNK_START_ARGS: "--accept-license"
+      <<: *splunk-env
     volumes:
-    - sh1_etc:/opt/splunk/etc
-    - sh1_var:/opt/splunk/var
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
-  # -------------------------------
-  # Search Head 2
-  # -------------------------------
+      - sh1_etc:/opt/splunk/etc
+      - sh1_var:/opt/splunk/var
+
   sh2:
-    image: splunk/splunk:9.0.3-openjdk11
-    container_name: sh2
+    <<: *splunk-common
     hostname: sh2
-    networks:
-      - skynet
     ports:
-      - "8006:8000"
-      - "8096:8089"
+      - "8002:8000"
     environment:
-      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
-      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
-      SPLUNK_START_ARGS: "--accept-license"
+      <<: *splunk-env
     volumes:
-    - sh2_etc:/opt/splunk/etc
-    - sh2_var:/opt/splunk/var
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
-  # -------------------------------
-  # Search Head 3
-  # -------------------------------
+      - sh2_etc:/opt/splunk/etc
+      - sh2_var:/opt/splunk/var
+
   sh3:
-    image: splunk/splunk:9.0.3-openjdk11
-    container_name: sh3
+    <<: *splunk-common
     hostname: sh3
-    networks:
-      - skynet
     ports:
-      - "8007:8000"
-      - "8097:8089"
+      - "8003:8000"
     environment:
-      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
-      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
-      SPLUNK_START_ARGS: "--accept-license"
+      <<: *splunk-env
     volumes:
-    - sh3_etc:/opt/splunk/etc
-    - sh3_var:/opt/splunk/var
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
+      - sh3_etc:/opt/splunk/etc
+      - sh3_var:/opt/splunk/var
+
   # -------------------------------
   # Deployer
   # -------------------------------
   dep1:
-    image: splunk/splunk:9.0.3-openjdk11
-    container_name: dep1
+    <<: *splunk-common
     hostname: dep1
-    networks:
-      - skynet
     ports:
-      - "8008:8000"
-      - "8098:8089"
+      - "8004:8000"
     environment:
-      SPLUNK_PASSWORD: ${SPLUNK_PASSWORD}
-      SPLUNK_GENERAL_TERMS: "--accept-sgt-current-at-splunk-com"
-      SPLUNK_START_ARGS: "--accept-license"
+      <<: *splunk-env
     volumes:
-    - dep1_etc:/opt/splunk/etc
-    - dep1_var:/opt/splunk/var
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
+      - dep1_etc:/opt/splunk/etc
+      - dep1_var:/opt/splunk/var
+
 # -------------------------------
 # Networks
 # -------------------------------
 networks:
   skynet:
-    external: true
+    driver: bridge
+
 # -------------------------------
-# Named Volumes
+# Volumes
 # -------------------------------
 volumes:
   sh1_etc:
